@@ -66,7 +66,6 @@ int64_t cal_crc(char *ptr, unsigned int len, uint32_t crc_old) {
 
     crc = crc ^ (-1);
 
-
     while(len-- != 1) { 
         y = (crc ^ (int)*ptr) & 0xFF;
         x = crc32_table[y];
@@ -114,25 +113,4 @@ void init(Handle<Object> exports, Handle<Object> module) {
 }
 
 NODE_MODULE(crc32, init);
-
-
-
-/*
-int main() {
-    unsigned char x[] = "The quick brown fox jumped over the lazy dog.";
-    long c = cal_crc(x, sizeof(x) / sizeof(*x));
-    cout << "re:" << c << endl;
-    unsigned char y[] = "中文";
-
-    c = cal_crc(y, sizeof(y) / sizeof(*y));
-
-    cout << y << endl;
-
-    cout << c << endl;
-
-    return 0;
-}
-*/
-
-
 
