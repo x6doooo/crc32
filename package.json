@@ -1,0 +1,32 @@
+{
+  "name": "crc32",
+  "version": "0.0.1",
+  "description": "Node.js C++ module",
+  "keywords": [
+    "crc32",
+    "c++"
+  ],
+  "author": "Dx.Yang<x6doooo@gmail.com>",
+  "main": "./build/Release/crc32.node",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/x6doooo/crc32.git"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "install": "node-gyp rebuild"
+  },
+  "gypfile": true,
+  "bugs": {
+    "url": "http://github.com/x6doooo/crc32/issues"
+  },
+  "license": [
+    {
+      "type" : "MIT",
+      "url" : "https://github.com/x6doooo/crc32/raw/master/LICENSE-MIT"
+    }
+  ]
+}
+
