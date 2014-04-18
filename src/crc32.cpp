@@ -1,6 +1,7 @@
 #include <node.h>
 #include <v8.h>
-#include <cstdlib>
+
+using namespace v8;
 
 const unsigned int crc32_table[] = {
     0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 
@@ -57,17 +58,17 @@ const unsigned int crc32_table[] = {
     0x2D02EF8D
 };
     
-int64_t cal_crc(char *ptr, unsigned int len, uint32_t crc_old) { 
+uint32_t cal_crc(char *ptr, uint8_t len, uint32_t crc_old) { 
  
-    int y = 0;
-    int x = 0;
+    int64_t y = 0;
+    int64_t x = 0;
 
     int64_t crc = (int64_t)crc_old;
 
     crc = crc ^ (-1);
 
     while(len-- != 1) { 
-        y = (crc ^ (int)*ptr) & 0xFF;
+        y = (crc ^ (int64_t)*ptr) & 0xFF;
         x = crc32_table[y];
         crc = ((unsigned)crc >> 8) ^ x;
         ptr++; 
@@ -76,13 +77,11 @@ int64_t cal_crc(char *ptr, unsigned int len, uint32_t crc_old) {
     crc = crc ^ (-1);
 
     if (crc < 0) {
-        return (4294967296 + crc);
+        return (uint32_t) crc;
     }
 
     return crc; 
 }
-
-using namespace v8;
 
 Handle<Value> New(const Arguments &args) {
     HandleScope scope;
@@ -97,19 +96,21 @@ Handle<Value> New(const Arguments &args) {
 
     char *v = *str; 
 
-    unsigned int len = str.length();
+    uint8_t len = str.length();
 
-    int64_t c = cal_crc(v, len + 1, crc_old);
+    uint32_t c = cal_crc(v, len + 1, crc_old);
 
     char buf[16];
-    sprintf(buf, "%lld", c);
+    sprintf(buf, "%u", c);
 
     return scope.Close(String::New(buf));
 }
 
 void init(Handle<Object> exports, Handle<Object> module) {
+
     exports->Set(String::NewSymbol("new"),
         FunctionTemplate::New(New)->GetFunction());
+
 }
 
 NODE_MODULE(crc32, init);
